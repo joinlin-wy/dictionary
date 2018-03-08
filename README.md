@@ -1,2 +1,2 @@
 # dictionary
-a application for learn English with vue + nuxt + mongodb
+nodeJS平台 + mongo数据库的后台服务搭建

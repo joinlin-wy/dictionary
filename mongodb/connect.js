@@ -8,7 +8,6 @@ module.exports = async function () {
             if (err) {
                 reject(err)
             } else {
-                console.log('connected succusfully to server')
                 resolve(client)
             }
         })

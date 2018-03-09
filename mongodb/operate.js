@@ -1,24 +1,32 @@
 const connect = require('./connect')
-const assert = require('assert')
+// const assert = require('assert')
 const curd = require('./CURD')
-const dbName = 'dictionary'
-let data = {
-    value: '今天是星期三，传说中的女神节，过了今天就是妇女节了',
-    date: '2018-03-07'
-}
-connect().then(function (client) {
-    operate(client)
-})
-async function operate(client) {
+
+
+module.exports = function(client){
+    const dbName = 'dictionary'
     const db = client.db(dbName)
-    
-    let docs = await curd.findDocuments({
-        db: db,
-        docName: 'words',
-        options:{
-            limit: 10
-        }
-    })
-    console.log(docs)
-    client.close()
+
+    async function getWords(options) {
+        let docs = await curd.findDocuments({
+            db: db,
+            docName: '考研英语词汇',
+            options: options
+        })
+        console.log(docs)
+        return docs
+    }
+    async function queryWord(options) {
+        let docs = await curd.findDocument({
+            db: db,
+            docName: '考研英语词汇',
+            data: options
+        })
+        console.log(docs)
+        return docs
+    }
+    return {
+        getWords,
+        queryWord
+    }
 }

@@ -1,12 +1,22 @@
 /*  create, read, update, and delete  APIs:http://mongodb.github.io/node-mongodb-native/3.0/api/Collection.html*/
 const assert = require('assert')
-const findDocuments = function (config) {
+const findDocument = function (config) {
     return new Promise(function (resolve, reject) {
-        config.db.collection(config.docName).find(config.data || {}, config.options || null,).toArray((err, docs) => {
+        config.db.collection(config.docName).findOne(config.data || {}, config.options || null, (err, docs) => {
             if (err) {
                 reject(err)
             } else {
-                console.log('find the following docs')
+                resolve(docs)
+            }
+        })
+    })
+}
+const findDocuments = function (config) {
+    return new Promise(function (resolve, reject) {
+        config.db.collection(config.docName).find(config.data || {}, config.options || null).toArray((err, docs) => {
+            if (err) {
+                reject(err)
+            } else {
                 resolve(docs)
             }
         })
@@ -96,6 +106,7 @@ const updateDocuments = function (config) {
 
 }
 module.exports = {
+    findDocument,
     findDocuments,
     insertDocuments,
     insertDocument,

@@ -92,9 +92,9 @@ const updateDocument = function (config) {
 }
 const updateDocuments = function (config) {
     return new Promise(function (resolve, reject) {
-        config.db.collection(config.docName).updateMany(config.filter, config.options || null, {
+        config.db.collection(config.docName).updateMany(config.filter, {
             $set: config.data
-        }, function (err, result) {
+        }, config.options || null, function (err, result) {
             if (err) {
                 reject(err)
             } else {
@@ -103,7 +103,6 @@ const updateDocuments = function (config) {
             }
         })
     })
-
 }
 module.exports = {
     findDocument,

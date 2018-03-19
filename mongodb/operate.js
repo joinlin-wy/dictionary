@@ -12,7 +12,8 @@ module.exports = function (client) {
             let docs = await curd.findDocuments({
                 db: db,
                 docName: '考研英语词汇',
-                options: options
+                query: options.query,
+                options: options.options
             })
             // console.log(docs)
             return docs
@@ -21,10 +22,20 @@ module.exports = function (client) {
             let docs = await curd.findDocument({
                 db: db,
                 docName: '考研英语词汇',
-                data: options
+                query: options.query,
+                options: options.options
             })
             // console.log(docs)
             return docs
+        },
+        async updateWord(options) {
+            let result = await curd.updateDocument({
+                db: db,
+                docName: '考研英语词汇',
+                filter: options.filter,
+                data: options.data
+            })
+            return result
         }
     }
 

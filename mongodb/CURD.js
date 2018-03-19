@@ -2,7 +2,7 @@
 const assert = require('assert')
 const findDocument = function (config) {
     return new Promise(function (resolve, reject) {
-        config.db.collection(config.docName).findOne(config.data || {}, config.options || null, (err, docs) => {
+        config.db.collection(config.docName).findOne(config.query || {}, config.options || null, (err, docs) => {
             if (err) {
                 reject(err)
             } else {
@@ -13,7 +13,7 @@ const findDocument = function (config) {
 }
 const findDocuments = function (config) {
     return new Promise(function (resolve, reject) {
-        config.db.collection(config.docName).find(config.data || {}, config.options || null).toArray((err, docs) => {
+        config.db.collection(config.docName).find(config.query || {}, config.options || null).toArray((err, docs) => {
             if (err) {
                 reject(err)
             } else {
@@ -76,9 +76,9 @@ const deleteDocuments = function (config) {
 }
 const updateDocument = function (config) {
     return new Promise(function (resolve, reject) {
-        config.db.collection(config.docName).updateOne(config.filter, config.options || null, {
+        config.db.collection(config.docName).updateOne(config.filter, {
             $set: config.data
-        }, function (err, result) {
+        }, config.options || null, function (err, result) {
             if (err) {
                 reject(err)
             } else {
@@ -92,9 +92,9 @@ const updateDocument = function (config) {
 }
 const updateDocuments = function (config) {
     return new Promise(function (resolve, reject) {
-        config.db.collection(config.docName).updateMany(config.filter, {
+        config.db.collection(config.docName).updateMany(config.filter, config.options || null, {
             $set: config.data
-        }, config.options || null, function (err, result) {
+        }, function (err, result) {
             if (err) {
                 reject(err)
             } else {
@@ -103,6 +103,7 @@ const updateDocuments = function (config) {
             }
         })
     })
+
 }
 module.exports = {
     findDocument,

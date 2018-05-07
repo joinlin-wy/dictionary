@@ -1,11 +1,11 @@
-const connect = require('./connect')
+const connect = require('./connect');
 // const assert = require('assert')
-const curd = require('./CURD')
+const curd = require('./CURD');
 
 
 module.exports = function (client) {
-    const dbName = 'dictionary'
-    const db = client.db(dbName)
+    const dbName = 'dictionary';
+    const db = client.db(dbName);
 
     const dbOperator = {
         async getWords(options) {
@@ -14,9 +14,9 @@ module.exports = function (client) {
                 docName: '考研英语词汇',
                 query: options.query,
                 options: options.options
-            })
+            });
             // console.log(docs)
-            return docs
+            return docs;
         },
         async queryWord(options) {
             let docs = await curd.findDocument({
@@ -24,9 +24,9 @@ module.exports = function (client) {
                 docName: '考研英语词汇',
                 query: options.query,
                 options: options.options
-            })
+            });
             // console.log(docs)
-            return docs
+            return docs;
         },
         async updateWord(options) {
             let result = await curd.updateDocument({
@@ -34,10 +34,19 @@ module.exports = function (client) {
                 docName: '考研英语词汇',
                 filter: options.filter,
                 data: options.data
-            })
-            return result
+            });
+            return result;
+        },
+        async markWord(options){
+            let result = await curd.updateDocument({
+                db: db,
+                docName: '考研英语词汇',
+                filter: {word:options.word},
+                data: {isMarked:options.isMarked}
+            });
+            return result;
         }
-    }
+    };
 
-    return dbOperator
-}
+    return dbOperator;
+};

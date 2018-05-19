@@ -12,7 +12,7 @@ app.use(session({
   secret: 'love me,love my dog',
   name: 'dictionary', //这里的name值得是cookie的name，默认cookie的name是：connect.sid
   cookie: {
-    maxAge: 60000 //设置maxAge是80000ms，即80s后session和相应的cookie失效过期
+    maxAge: 600000 //设置maxAge是80000ms，即80s后session和相应的cookie失效过期
   },
   rolling: false, //每个请求都重新设置一个 cookie，默认为 false。
   resave: false, //即使 session 没有被修改，也保存 session 值，默认为 true。

@@ -68,9 +68,8 @@ const deleteDocuments = function (config) {
 };
 const updateDocument = function (config) {
   return new Promise(function (resolve, reject) {
-    config.db.collection(config.docName).updateOne(config.filter, {
-      $set: config.data
-    }, config.options || null, function (error, result) {
+    config.db.collection(config.docName).updateOne(config.filter, config.operate,
+      config.options || null, function (error, result) {
       if (error) {
         resolve({error});
       } else {

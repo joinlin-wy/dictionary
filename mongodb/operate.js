@@ -1,26 +1,23 @@
-const connect = require('./connect');
-// const assert = require('assert')
 const curd = require('./CURD');
 
 
 module.exports = function (client) {
   const dbName = 'dictionary';
   const db = client.db(dbName);
-
+  
   const dbOperator = {
     async getWords(options) {
       let result = await curd.findDocuments({
-        db: db,
+        db,
         docName: '考研英语词汇',
         query: options.query,
         options: options.options
       });
-      // console.log(docs)
       return result;
     },
     async queryWord(options) {
       let result = await curd.findDocument({
-        db: db,
+        db,
         docName: '考研英语词汇',
         query: options.query,
         options: options.options
@@ -30,39 +27,80 @@ module.exports = function (client) {
     },
     async updateWord(options) {
       let result = await curd.updateDocument({
-        db: db,
+        db,
         docName: '考研英语词汇',
         filter: options.filter,
-        data: options.data
-      });
-      return result;
-    },
-    async markWord(options) {
-      let result = await curd.updateDocument({
-        db: db,
-        docName: '考研英语词汇',
-        filter: {
-          word: options.word
-        },
-        data: {
-          isMarked: options.isMarked
+        operate: {
+          $set: options.data
         }
       });
       return result;
     },
-    async checkPassword(options) {
+    async markWord(options) {
+      let operate = {};
+      let date = new Date();
+      if(options.isMarked){
+        operate = {
+          $push:{
+            markedWords: {
+              word: options.word,
+              time: date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+            }
+          }
+        }
+      }else{
+        operate = {
+          $pull: {
+            markedWords: {
+              word: options.word,
+            }
+          }
+        }
+      }
+      let result = await curd.updateDocument({
+        db,
+        docName: 'users',
+        filter: {
+          account: options.account
+        },
+        operate
+      });
+      return result;
+    },
+    async getMarkedWords(account) {
       let result = await curd.findDocument({
-        db: db,
+        db,
         docName: 'users',
         query: {
-          username: options.username,
-          password: options.password
+          account
         },
-        options: options.options
+        options:{
+          projection:{
+            markedWords:1,
+            _id:0
+          }
+        }
+      });
+      return result;
+    },
+    async getUserInfo(options) {
+      let result = await curd.findDocument({
+        db,
+        docName: 'users',
+        query: options
+      });
+      
+      return result.docs;
+    },
+    async register(options) {
+      let result = await curd.insertDocument({
+        db,
+        docName: 'users',
+        data: options
       });
       return result;
     }
   };
-
+  
   return dbOperator;
 };

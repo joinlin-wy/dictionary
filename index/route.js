@@ -1,4 +1,3 @@
-const mongodb = require('../mongodb');
 const sign = require('./sign');
 const words = require('./words');
 

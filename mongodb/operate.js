@@ -5,7 +5,7 @@ module.exports = function (client) {
   const dbName = 'dictionary';
   const db = client.db(dbName);
   
-  const dbOperator = {
+  return {
     async getWords(options) {
       let result = await curd.findDocuments({
         db,
@@ -76,8 +76,7 @@ module.exports = function (client) {
         },
         options:{
           projection:{
-            markedWords:1,
-            _id:0
+            markedWords:1
           }
         }
       });
@@ -102,5 +101,4 @@ module.exports = function (client) {
     }
   };
   
-  return dbOperator;
 };

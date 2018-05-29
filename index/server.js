@@ -19,8 +19,8 @@ app.use(session({
   saveUninitialized: false
 }));
 
-app.startup = function () {
-  let server = app.listen(8888, function () {
+app.startup = function (port) {
+  let server = app.listen(port || 8800, function () {
     let host = server.address().address;
     let port = server.address().port;
     route(app);

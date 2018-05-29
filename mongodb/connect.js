@@ -1,6 +1,6 @@
 const mongodb = require('mongodb');
 const client = mongodb.MongoClient;
-const url = 'mongodb://localhost:27017';
+const url = 'mongodb://iceyue.top:8181';
 module.exports = async function () {
   let Client = await new Promise(function (resolve, reject) {
     client.connect(url, (err, client) => {

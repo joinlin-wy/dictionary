@@ -8,14 +8,17 @@ module.exports = {
     let result = await mongodb.operate.getWords({
       options: {
         limit: userInfo.countNumber,
-        skip: userInfo.startIndex
+        skip: parseInt(userInfo.startIndex)
       }
     });
     result.docs.forEach((value) => {
-      for(let i=0;i<userInfo.markedWords.length;i++){
-        if(userInfo.markedWords[i].word === value.word){
-          value.isMarked = true;
-          return
+      value.isMarked = false;
+      if(userInfo.markedWords){
+        for(let i=0;i<userInfo.markedWords.length;i++){
+          if(userInfo.markedWords[i].word === value.word){
+            value.isMarked = true;
+            return
+          }
         }
       }
     });
@@ -27,7 +30,9 @@ module.exports = {
     } else {
       res.send({
         status: true,
-        docs: result.docs
+        docs: result.docs,
+        countNumber: userInfo.countNumber,
+        startIndex: userInfo.startIndex
       });
     }
   },
@@ -45,8 +50,7 @@ module.exports = {
     } else {
       res.send({
         status: true,
-        word: word,
-        explain: result.explain
+        docs: result.docs
       });
     }
   },
@@ -54,15 +58,15 @@ module.exports = {
     let word = req.query.word;
     let isMarked = req.query.isMarked === 'false';//为true添加收藏
     let account = req.session.account || req.cookies['account'] || req.query.account;
-    let result = await mongodb.operate.markWord({
+    let {error} = await mongodb.operate.markWord({
       word,
       isMarked,
       account
     });
-    if (result.error) {
+    if (error) {
       res.send({
         status: false,
-        msg: result.error
+        msg: error
       });
     } else {
       res.send({
@@ -79,5 +83,14 @@ module.exports = {
       docs,
       msg: error
     });
+  },
+  async updateStartIndex(req,res){
+    let index = req.query.index;
+    let account = req.session.account;
+    let {error} = await mongodb.operate.updateStartIndex(account,index);
+    res.send({
+      status: !error,
+      msg: error
+    })
   }
 };

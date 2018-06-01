@@ -51,5 +51,15 @@ module.exports = function (app) {
     })
     .get('/getMarkedWords', (req, res) => {
       words.getMarkedWords(req, res);
+    })
+    .get('/updateStartIndex', (req, res) => {
+      if (req.session.login) { //已登录
+        words.updateStartIndex(req, res);
+      } else {
+        res.send({
+          msg: '未登录',
+          status: false
+        });
+      }
     });
 };

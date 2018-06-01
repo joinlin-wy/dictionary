@@ -98,6 +98,17 @@ module.exports = function (client) {
         data: options
       });
       return result;
+    },
+    async updateStartIndex(account,index){
+      let result = await curd.updateDocument({
+        db,
+        docName: 'users',
+        filter: {account},
+        operate:{
+          $set:{startIndex: parseInt(index)}
+        }
+      });
+      return result;
     }
   };
   
